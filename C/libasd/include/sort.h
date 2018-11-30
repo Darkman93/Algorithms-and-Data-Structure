@@ -1,0 +1,5 @@
+#include "../src/sort/heap_sort.h"
+#include "../src/sort/insertion_sort.h"
+#include "../src/sort/merge_sort.h"
+#include "../src/sort/quick_sort.h"
+#include "../src/sort/selection_sort.h"

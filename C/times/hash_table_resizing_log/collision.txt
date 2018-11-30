@@ -1,0 +1,29 @@
+
+string
+
+CollionList - lunghezza massima: 10
+CollionList - lunghezza media:   4.215385
+
+
+int
+
+CollionList - lunghezza massima: 12
+CollionList - lunghezza media:   4.215385
+
+CollionList - lunghezza massima: 2
+CollionList - lunghezza media:   1.582634
+
+
+float
+
+CollionList - lunghezza massima: 10
+CollionList - lunghezza media:   4.193878
+
+CollionList - lunghezza massima: 11
+CollionList - lunghezza media:   1.982984
+
+CollionList - lunghezza massima: 11
+CollionList - lunghezza media:   1.772528
+
+
+

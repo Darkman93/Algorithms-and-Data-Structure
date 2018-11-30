@@ -1,0 +1,271 @@
+\documentclass{report}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage[table]{xcolor}
+\usepackage{array,ragged2e}
+\usepackage[parfill]{parskip}
+\usepackage{titlesec}
+\usepackage{lipsum}
+\usepackage{caption}
+\usepackage{siunitx}
+
+\captionsetup[table]{labelsep=space}
+
+\titleformat{\chapter}[display]{\normalfont\bfseries}{}{0pt}{\Large}
+
+\thispagestyle{empty}
+
+\centerline {\Large{\textsc{ UNIVERSIT\`A DEGLI STUDI DI TORINO}}}
+\vskip 20 pt
+
+\centerline {\Large{\textsc DIPARTIMENTO DI INFORMATICA}}
+
+\vskip 20 pt
+
+\centerline {{\textsc SCUOLA DI SCIENZE DELLA NATURA}}
+
+\vskip 20 pt
+
+\centerline {\Large{\textsc Corso di Laurea in Informatica}}
+
+\vskip 60 pt
+
+\begin{document}
+
+%\begin{tabular}{ccc}
+\centerline {\includegraphics[width=4cm]{logo.jpg}}
+%   \end{tabular}
+
+\vskip 1.2cm
+
+\centerline {\normalsize {LABORATORIO DI ALGORITMI E STRUTTURE DATI}}
+
+\vskip 0.7cm
+
+\centerline {\Large {\bf RELAZIONE DI LABORATORIO}}
+
+\vskip 1.7cm
+
+\hfill  {Riccardo Pala, Daniele Pira, Jacopo Tancredi}
+
+\vskip 2.7cm
+
+\centerline{Anno accademico: 2015/2016}
+
+\tableofcontents{}
+
+\chapter{Dati}
+
+La seguente tabella mostra i risultati di alcune semplici analisi effettuate sui dati in input:
+
+\begin{table} [!htb]
+\centering
+\resizebox{0.8\textwidth}{!}{
+\begin{tabular}{|l|r|r|}\hline
+\multicolumn{1}{|c|}{\textbf{Tipo di dato}} &
+\multicolumn{1}{c|}{\textbf{Valori distinti}} &
+\multicolumn{1}{c|}{\textbf{Totale}}\\\hline
+String     & 822      & 20000000 \\ \hline
+Integer    & 4908200  & 20000000 \\ \hline
+Float      & 19997945 & 20000000 \\ \hline
+\end{tabular}
+}
+\end{table}
+
+La prima colonna indica di quale tipo di dato si tratta, la seconda il numero di valori distinti assunti dagli elementi di quel tipo, mentre l'ultima colonna indica il numero totale di elementi.
+
+Da una prima analisi dei dati possiamo quindi dedurre che tra le stringhe vi siano numerose ripetizioni. Anche fra gli interi ve ne è un buon numero. Mentre per i double esse sono trascurabili.
+
+\chapter{Ordinamento}
+
+La seguente tabella riporta i tempi di esecuzione (in secondi) dei diversi tipi di algoritmi di ordinamento implementati:
+
+\begin{table} [!htb]
+\centering
+\resizebox{0.9\textwidth}{!}{
+\begin{tabular}{|l|r|r|r|}\hline
+\multicolumn{1}{|c|}{\textbf{Algoritmo}} &
+\multicolumn{1}{c|}{\textbf{String}} &
+\multicolumn{1}{c|}{\textbf{Integer}} &
+\multicolumn{1}{c|}{\textbf{Double}}\\\hline
+Quick (Tripartizione)  &  7.03      & 11.62     & 11.61    \\ \hline
+Quick (Libro di testo) &  N/A       &  9.51     &  9.68 \\ \hline
+Merge                  &  7.35      &  7.72     &  7.70    \\ \hline
+Heap                   & 26.03      & 37.88     & 37.58    \\ \hline
+Insertion              &  N/A       & N/A       & N/A      \\ \hline
+\end{tabular}
+}
+\end{table}
+
+Nel caso in cui un algoritmo non termini l'esecuzione entro 10 minuti viene riportato N/A.
+
+\section{Quicksort}
+
+Sono state utilizzate due implementazioni dell'algoritmo.
+
+La prima effettua una tripartizione al posto della classica bipartizione. Inoltre utilizza la strategia di selezione del pivot chiamata \textit{Median of three}, la quale consiste nel scegliere la mediana tra i tre elementi posti rispettivamente all'inizio, al centro ed alla fine della porzione di array su cui si effettuerà la partizione.
+
+Osservando la tabella notiamo che il tempo di esecuzione della versione con tripartizione è significativamente ridotto nel caso in cui gli elementi da ordinare siano delle stringhe. L'ipotesi è che l'implementazione con tripartizione si comporta meglio nel caso di un grande numero di elementi ripetuti.
+
+Per verificarla è stata creata una seconda versione che segue quella suggerita dal libro di testo del corso (con bipartizione e scelta "fissa" del pivot).
+
+I risultati confermano la tesi.
+
+
+\section{Mergesort}
+
+I tempi di esecuzione del mergesort sono simili a quelli del quicksort.
+
+Questo rispechia la teoria in quanto entrambi gli algoritmi hanno complessità $\Theta$(n log n), dove \textit{n} è la dimensione dell'input.
+
+Confrontando le implementazioni, ci aspettiamo che il primo sia meno performante del secondo dato che lavora ricopiando reciprocamente i dati dall'array di partenza su uno di supporto (e viceversa).
+Sperimentalmente questo non succede per tre motivi: il mergesort, a differenza del quicksort,  non soffre di sbilanciamento; il quicksort con tripartizione e m.o.t. risulta onerosa in termini di computazione; il mergesort riduce il "deficit" di copiatura delle porzioni intermedie avvalendosi di chiamate di sistema.
+
+E' comunque sconsigliato usarlo per una grossa quantità di dati, in quanto non opera \textit{in place}.
+
+\section{Heapsort}
+
+Anche in questo caso i risultati hanno un comportamento simile ai precedenti siccome l'heapsort ha una complessità nell'ordine di $\Theta$(n log n).
+
+Al contrario del quicksort gli elementi ripetuti non incidono sull'efficienza dell'algoritmo. Inoltre, al contrario del mergesort, esso non necessita di spazio aggiuntivo.
+
+Questa garanzia sulle prestazione nel caso peggiore è, però, ottenuta al prezzo di cicli interni più complessi (vedi move up e move down), ed un numero di confronti più elevato. Motivo per cui impiega più tempo ad ordinare rispetto ai precedenti.
+
+\section{Insertion Sort}
+
+Come sappiamo la complessità asintotica dell'insertion sort è nell'ordine di $\Theta(n^2)$, dove \textit{n} è la dimensione dell'input.
+
+I risultati sperimentali concordano con tale affermazione, difatti l'esecuzione dell'algoritmo non termina entro i 10 minuti prestabiliti.
+
+
+\chapter{Dizionari}
+
+La seguente tabella riporta i tempi di esecuzione (in secondi) di alcune sequenze di operazioni su diverse strutture dati:
+
+\begin{table} [!htb]
+\centering
+\resizebox{0.9\textwidth}{!}{
+\begin{tabular}{|l|r|r|r|}\hline
+\multicolumn{1}{|c|}{\textbf{Struttura Dati}} &
+\multicolumn{1}{c|}{\textbf{String}}  &
+\multicolumn{1}{c|}{\textbf{Integer}} &
+\multicolumn{1}{c|}{\textbf{Double}}  \\\hline
+Binary Tree (Insert)          &  1.98      & 29.77     & 46.32    \\ \hline
+Binary Tree (Search)          &  0.29      &  1.64     &  2.54    \\ \hline
+Binary Tree (Delete)          &  0.09      &  0.64     &  2.01    \\ \hline
+Hash Table (Insert)           &  3.04      &  7.07     & 17.25    \\ \hline
+Hash Table (Search)           &  0.26      &  0.33     &  0.42    \\ \hline
+Hash Table (Delete)           &  0.21      &  0.58     &  0.63    \\ \hline
+Prealloc Hash Table (Insert)  &  1.63      &  5.66     &  5.55    \\ \hline
+Prealloc Hash Table (Search)  &  0.23      &  0.28     &  0.37    \\ \hline
+Prealloc Hash Table (Delete)  &  0.22      &  0.50     &  0.57    \\ \hline
+\end{tabular}
+}
+\end{table}
+
+Per ogni struttura dati sono stati effettuati 20 milioni di inserimenti, 1 milione di accessi ed 1 milione di cancellazioni.
+
+\section{Binary Tree}
+
+Possiamo constatare dai dati che i tempi di inserimento aumentano con il diminuire delle ripetizioni.
+
+Come sappiamo in un dizionario non si possono avere due elementi con la stessa chiave. Ogniqualvolta si tenta di inserire un elemento la cui chiave è già presente nella struttura dati, verrà semplicemente aggiornato il valore associato ad essa. Di conseguenza l'altezza dell'albero non cambia.
+
+Possiamo quindi dedurre che l'altezza dell'albero è inversamente proporzionale al numero di ripetizioni delle chiavi. Più in generale sarà $O(k)$ dove \textit{k} è il numero di chiavi distinte. Motivo per cui il tempo di esecuzione delle operazioni di insert e delete diminuisce all'aumentare delle ripetizioni.
+
+\section{Hash Table}
+
+Come precedentemente detto, per i binary tree, anche in questo caso, i tempi di inserimento aumentano con il diminuire delle ripetizioni.
+
+La nostra implementazione per le hash table, quando un predeterminato fattore di carico raggiunge una certa soglia (nel nostro caso 5), prevede il ridimensionamento automatico; inoltre non sono ammessi elementi ripetuti. Davanti a dataset con un gran numero di elementi duplicati, è lecito prevedere che vi siano meno ridimensionamenti, di consuguenza ci aspettiamo un tempo di esecuzione inferiore rispetto ad un input eterogeneo.
+
+Abbiamo formulato varie ipotesi sul motivo per cui i tempi di esecuzione di search e delete nelle hash table seguono lo stesso trand:
+
+\begin{itemize}
+    \item funzioni di hash differenti per ogni tipo (e quindi con complessita' diverse);
+    \item distribuzione non uniforme degli elementi (per alcuni tipi);
+    \item perdita di località dei dati in memoria.
+\end{itemize}
+
+\subsection{Dati raccolti}
+I dati che sono stati raccolti per analizzare le hash table sono i seguenti:
+
+\begin{table} [!htb]
+\centering
+\resizebox{0.8\textwidth}{!}{
+\begin{tabular}{|l|r|r|r|}\hline
+\multicolumn{1}{|c|}{} &
+\multicolumn{1}{|c|}{\textbf{String}} &
+\multicolumn{1}{c|}{\textbf{Integer}} &
+\multicolumn{1}{c|}{\textbf{Double}} \\\hline
+Dimensione finale tavola & 200 & 3125000 & 15625000 \\\hline
+Lunghezza media liste    & 4.2 & 1.5     & 1,7      \\\hline
+\end{tabular}
+}
+\end{table}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=1]{string.png}
+\caption{string data distribution}
+\label{fig:string}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=1]{integer.png}
+\caption{integer data distribution}
+\label{fig:string}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=1]{double.png}
+\caption{double data distribution}
+\label{fig:string}
+\end{figure}
+
+\chapter{Grafi}
+
+\section{Cammini Minimi}
+
+Nella seguente tabella vengono riportati i dati relativi all'applicazione dell'algoritmo di Dijkstra
+
+\begin{table} [!htb]
+\centering
+\resizebox{0.6\textwidth}{!}{
+\begin{tabular}{|l|l|r|}\hline
+\multicolumn{1}{|c|}{\textbf{Partenza}} &
+\multicolumn{1}{c|}{\textbf{Arrivo}}  &
+\multicolumn{1}{c|}{\textbf{Km}} \\\hline
+Torino   &  Catania  &  1207.680 \\\hline
+Torino   &  Borsoi   &  N/A      \\\hline
+Torino   &  Sassari  &  639.883  \\\hline
+Roma     &  Venezia  &  416.184  \\\hline
+Perfugas &  Bulzi    &  20.864   \\\hline
+\end{tabular}
+}
+\end{table}
+
+Nel caso in cui non esista un cammino minimo dalla località di partenza alla località di arrivo viene riportato N/A
+
+\section{Componenti Fortemente Connesse}
+
+Per calcolare il numero di componenti fortemente connesse abbiamo implementato l'algoritmo di Tarjan, avente complessità nell'ordine di $O(V+E)$.
+
+Le componenti risultanti sono riportate nella seguente tabella
+
+\begin{table} [!htb]
+\centering
+\resizebox{0.7\textwidth}{!}{
+\begin{tabular}{|l|r|r|r|}\hline
+\multicolumn{1}{|c|}{} &
+\multicolumn{1}{|c|}{\textbf{SCC1}} &
+\multicolumn{1}{c|}{\textbf{SCC2}} &
+\multicolumn{1}{c|}{\textbf{SCC3}} \\\hline
+Dimensione & 18636 & 2 & 2 \\\hline
+\end{tabular}
+}
+\end{table}
+
+\end{document}
